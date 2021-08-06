@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        {{msg}}
+        {{$store.state.msg}}
+        {{$store.getters.randomMsg}}
+    </div>
+    <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.2/vue.js"></script>
+    <!-- <script src="https://cdn.bootcdn.net/ajax/libs/vuex/3.5.1/vuex.js"></script> -->
+    <script src="./vuex-recode.js"></script>
+    <script>
+    
+        let Store = Vuex.Store
+
+        let state = {
+            msg: 'good'
+        }
+        let actions = {
+            updateMsg({
+                commit
+            }, params) {
+                commit('updateMsg', params)
+            }
+        }
+        let mutations = {
+            updateMsg(state, params) {
+                state.msg = params
+            }
+        }
+        let getters = {
+            randomMsg: (state)=>{
+                return state.msg + '-' + Math.floor(Math.random() * 100)
+            }
+        }
+        let store = new Store({
+            state,
+            actions,
+            mutations,
+            getters
+        })
+        // 注册
+        
+        // Vue.use()
+        // Vue.use(Vuex)
+        // 初始化vm
+        let vm = new Vue({
+            el: '#app',
+            computed: {
+                msg() {
+                    return this.$store.state.msg
+                }
+            },
+            store
+        })
+        console.log(vm);
+        // vm.$options.store
+        // vm.$store
+        setTimeout(function(){
+            vm.$store.dispatch('updateMsg', 'gooooood')
+        }, 2000)
+    </script>
+</body>
+
+</html>
